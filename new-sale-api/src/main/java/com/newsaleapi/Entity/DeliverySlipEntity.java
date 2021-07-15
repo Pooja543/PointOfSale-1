@@ -41,11 +41,17 @@ public class DeliverySlipEntity implements Serializable {
 
 	private Long salesMan;
 
-	@OneToMany(mappedBy = "delivery_slip")
-	private List<BarcodeEntity> barcodes;
+	private String barcode;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "newsale_id", nullable = false)
-	private NewSaleEntity newsale;
+	/*
+	 * @OneToMany(mappedBy = "delivery_slip") private List<BarcodeEntity> barcodes;
+	 */
+
+	/*
+	 * @ManyToOne(fetch = FetchType.LAZY)
+	 * 
+	 * @JoinColumn(name = "newsale_id", nullable = false) private NewSaleEntity
+	 * newsale;
+	 */
 
 }

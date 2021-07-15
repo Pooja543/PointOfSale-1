@@ -43,8 +43,9 @@ public class BarcodeEntity {
 
 	private LocalDateTime createdDate;
 
-	@ManyToOne
-	// @JoinColumn(name = "ds_id")
-	private DeliverySlipEntity delivery_slip;
+	/*
+	 * @ManyToOne // @JoinColumn(name = "ds_id") private DeliverySlipEntity
+	 * delivery_slip;
+	 */
 
 }

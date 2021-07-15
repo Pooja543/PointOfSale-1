@@ -15,5 +15,7 @@ public class DeliverySlipVo {
 	private String type;
 
 	private Long salesMan;
+	
+	private String barcodes;
 
 }

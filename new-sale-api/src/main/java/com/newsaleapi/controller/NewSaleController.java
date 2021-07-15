@@ -59,4 +59,15 @@ public class NewSaleController {
 
 	}
 
+	/*
+	 * @PostMapping(CommonRequestMappigs.CREATE_DS) public ResponseEntity<?>
+	 * saveDeliverySlip(@RequestBody DeliverySlipVo vo) {
+	 * 
+	 * ResponseEntity<?> saveDs = newSaleService.saveDeliverySlip(vo);
+	 * 
+	 * return new ResponseEntity<>(saveDs, HttpStatus.OK);
+	 * 
+	 * }
+	 */
+
 }

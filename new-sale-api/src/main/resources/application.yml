@@ -20,7 +20,7 @@ spring:
     password: 1234 
  jpa:
    hibernate:
-    ddl-auto: update
+    ddl-auto: create
    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
    show-sql: true
    springdoc:

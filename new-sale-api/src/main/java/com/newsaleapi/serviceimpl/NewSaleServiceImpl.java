@@ -1,8 +1,11 @@
 package com.newsaleapi.serviceimpl;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.auditing.DateTimeProvider;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -74,16 +77,25 @@ public class NewSaleServiceImpl implements NewSaleService {
 			return new ResponseEntity<>(vo, HttpStatus.OK);
 		}
 	}
+	/*
+	 * @Override public ResponseEntity<?> saveDeliverySlip(DeliverySlipVo vo) {
+	 * 
+	 * 
+	 * DeliverySlipEntity dsEntity = newSaleMapper.convertDsVoToEntity(vo);
+	 * 
+	 * dsRepo.save(dsEntity);
+	 * 
+	 * return new ResponseEntity<>("Deliveryslip details saved successfully..",
+	 * HttpStatus.OK); }
+	 */
 
 	@Override
 	public ResponseEntity<?> saveDeliverySlip(DeliverySlipVo vo) {
 
-		// DeliverySlipEntity dsRecord = dsRepo.get
-
 		DeliverySlipEntity dsEntity = newSaleMapper.convertDsVoToEntity(vo);
-
 		dsRepo.save(dsEntity);
 
 		return new ResponseEntity<>("Deliveryslip details saved successfully..", HttpStatus.OK);
 	}
+
 }

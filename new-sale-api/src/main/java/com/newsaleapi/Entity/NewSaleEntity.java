@@ -49,7 +49,8 @@ public class NewSaleEntity {
 
 	private Long netPayableAmount;
 
-	@OneToMany(mappedBy = "newsale")
-	private List<DeliverySlipEntity> dlSlip;
+	/*
+	 * @OneToMany(mappedBy = "newsale") private List<DeliverySlipEntity> dlSlip
+	 */;
 
 }
