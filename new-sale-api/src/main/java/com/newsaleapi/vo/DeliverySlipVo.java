@@ -1,7 +1,13 @@
 package com.newsaleapi.vo;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+
 import org.springframework.stereotype.Component;
+
+import com.newsaleapi.common.DSStatus;
+
 import lombok.Data;
 
 @Component
@@ -14,8 +20,22 @@ public class DeliverySlipVo {
 
 	private String type;
 
+	private Long mrp;
+
+	private Long promoDisc;
+
+	private Long netAmount;
+
+	private DSStatus status;
+
 	private Long salesMan;
-	
-	private String barcodes;
+
+	private LocalDate createdDate;
+
+	private LocalDateTime lastModified;
+
+	// private Long salesMan;
+
+	// private String barcodes;
 
 }

@@ -1,5 +1,7 @@
 package com.newsaleapi.vo;
 
+import java.time.LocalDateTime;
+
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.stereotype.Component;
 
@@ -23,5 +25,9 @@ public class BarcodeVo {
 	private Long netAmount;
 
 	private Long salesMan;
+
+	private LocalDateTime createdDate;
+
+	private LocalDateTime lastModified;
 
 }

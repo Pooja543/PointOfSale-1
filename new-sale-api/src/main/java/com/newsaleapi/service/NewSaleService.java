@@ -18,6 +18,6 @@ public interface NewSaleService {
 
 	ResponseEntity<?> getBarcodeDetails(String barCode);
 
-	ResponseEntity<?> saveDeliverySlip(DeliverySlipVo vo);
+	String saveDeliverySlip(DeliverySlipVo vo);
 
 }

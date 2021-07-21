@@ -1,11 +1,13 @@
 package com.newsaleapi.serviceimpl;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.auditing.DateTimeProvider;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.newsaleapi.Entity.BarcodeEntity;
 import com.newsaleapi.Entity.DeliverySlipEntity;
+import com.newsaleapi.common.DSStatus;
 import com.newsaleapi.mapper.NewSaleMapper;
 import com.newsaleapi.repository.BarcodeRepository;
 import com.newsaleapi.repository.DeliverySlipRepository;
@@ -77,25 +80,38 @@ public class NewSaleServiceImpl implements NewSaleService {
 			return new ResponseEntity<>(vo, HttpStatus.OK);
 		}
 	}
-	/*
-	 * @Override public ResponseEntity<?> saveDeliverySlip(DeliverySlipVo vo) {
-	 * 
-	 * 
-	 * DeliverySlipEntity dsEntity = newSaleMapper.convertDsVoToEntity(vo);
-	 * 
-	 * dsRepo.save(dsEntity);
-	 * 
-	 * return new ResponseEntity<>("Deliveryslip details saved successfully..",
-	 * HttpStatus.OK); }
-	 */
 
 	@Override
-	public ResponseEntity<?> saveDeliverySlip(DeliverySlipVo vo) {
+	public String saveDeliverySlip(DeliverySlipVo vo) {
 
-		DeliverySlipEntity dsEntity = newSaleMapper.convertDsVoToEntity(vo);
-		dsRepo.save(dsEntity);
+		DeliverySlipEntity entity = new DeliverySlipEntity();
+		List<BarcodeVo> barVo = vo.getBarcode();
 
-		return new ResponseEntity<>("Deliveryslip details saved successfully..", HttpStatus.OK);
+		entity.setMrp(barVo.stream().mapToLong(i -> i.getMrp()).sum());
+		entity.setPromoDisc(barVo.stream().mapToLong(i -> i.getPromoDisc()).sum());
+		entity.setNetAmount(barVo.stream().mapToLong(i -> i.getNetAmount()).sum());
+		entity.setSalesMan(vo.getSalesMan());
+		entity.setQty(vo.getQty());
+		entity.setType(vo.getType());
+		entity.setCreatedDate(LocalDate.now());
+		entity.setLastModified(LocalDateTime.now());
+		entity.setStatus("Pending");
+
+		DeliverySlipEntity savedEntity = dsRepo.save(entity);
+		List<String> barcodeList = barVo.stream().map(x -> x.getBarcode()).collect(Collectors.toList());
+
+		List<BarcodeEntity> barcodeDetails = barcodeRepository.findByBarcodeIn(barcodeList);
+
+		barcodeDetails.stream().forEach(a -> {
+
+			a.setDeliverySlip(savedEntity);
+			a.setLastModified(LocalDateTime.now());
+
+			barcodeRepository.save(a);
+		});
+
+		return "Successfully created Delivery slip ";
+
 	}
 
 }
