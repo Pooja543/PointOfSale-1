@@ -58,39 +58,5 @@ public class NewSaleMapper {
 		return null;
 	}
 
-	/*
-	 * public DeliverySlipEntity convertDsVoToEntity(DeliverySlipVo vo) {
-	 * 
-	 * DeliverySlipEntity entity = new DeliverySlipEntity();
-	 * 
-	 * // List<String> barcodes= Arrays.asList("BAR123","BAR1234");
-	 * 
-	 * entity.setDsId(10l); entity.setQty(vo.getQty());
-	 * entity.setSalesMan(vo.getSalesMan()); entity.setBarcode(vo.getBarcodes()); //
-	 * entity.setBarcodes(barcodes);
-	 * 
-	 * return entity; }
-	 */
 
-	/*
-	 * public DeliverySlipEntity convertDsVoToEntity(DeliverySlipVo vo) {
-	 * 
-	 * DeliverySlipEntity entity = new DeliverySlipEntity();
-	 * 
-	 * entity.setQty(vo.getQty()); entity.setSalesMan(vo.getSalesMan());
-	 * entity.setType(vo.getType()); entity.setDsId(10l); List<BarcodeEntity>
-	 * bcEntity = new ArrayList<>();
-	 * 
-	 * for (BarcodeVo bc : vo.getBarcode()) {
-	 * 
-	 * BarcodeEntity ds = new BarcodeEntity(); ds.setBarcode(bc.getBarcode());
-	 * ds.setBarcodIid(20l); ds.setItemDesc(bc.getItemDesc());
-	 * ds.setMrp(bc.getMrp()); ds.setNetAmount(bc.getNetAmount());
-	 * ds.setPromoDisc(bc.getPromoDisc()); ds.setQty(bc.getQty());
-	 * ds.setSalesMan(bc.getSalesMan());
-	 * 
-	 * bcEntity.add(ds); } //entity.setBarcodes(bcEntity);
-	 * 
-	 * return entity; }
-	 */
 }
