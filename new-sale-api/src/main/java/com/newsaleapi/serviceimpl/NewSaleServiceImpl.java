@@ -15,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.newsaleapi.Entity.BarcodeEntity;
 import com.newsaleapi.Entity.DeliverySlipEntity;
-import com.newsaleapi.common.DSStatus;
 import com.newsaleapi.mapper.NewSaleMapper;
 import com.newsaleapi.repository.BarcodeRepository;
 import com.newsaleapi.repository.DeliverySlipRepository;
@@ -24,6 +23,13 @@ import com.newsaleapi.vo.BarcodeVo;
 import com.newsaleapi.vo.CustomerDetails;
 import com.newsaleapi.vo.DeliverySlipVo;
 
+/**
+ * Service class contains all bussiness logics related to new sale , create
+ * barcode , getting barcode details and create delivery slip
+ * 
+ * @author Manikanta Guptha
+ *
+ */
 @Service
 @Configuration
 public class NewSaleServiceImpl implements NewSaleService {
@@ -46,7 +52,7 @@ public class NewSaleServiceImpl implements NewSaleService {
 	@Override
 	public ResponseEntity<?> saveNewSaleRequest(CustomerDetails vo) {
 
-		Object result = template.postForObject(url, vo, String.class);
+		Object result = template.postForObject(url, vo, String.class);// rest call for Tag Customer
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
@@ -81,6 +87,7 @@ public class NewSaleServiceImpl implements NewSaleService {
 		}
 	}
 
+//Method for saving delivery slip 
 	@Override
 	public String saveDeliverySlip(DeliverySlipVo vo) {
 
@@ -109,9 +116,7 @@ public class NewSaleServiceImpl implements NewSaleService {
 
 			barcodeRepository.save(a);
 		});
-
 		return "Successfully created Delivery slip ";
-
 	}
 
 }

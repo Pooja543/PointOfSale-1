@@ -17,6 +17,14 @@ import com.newsaleapi.vo.BarcodeVo;
 import com.newsaleapi.vo.CustomerDetails;
 import com.newsaleapi.vo.DeliverySlipVo;
 
+/**
+ * Controller class for accepting all the requests which are related to
+ * CustomerSaving API, NewSale API, Create delivery slip API
+ * 
+ * @author Manikanta Guptha
+ *
+ */
+
 @RestController
 @CrossOrigin
 @RequestMapping(CommonRequestMappigs.NEW_SALE)
@@ -25,6 +33,7 @@ public class NewSaleController {
 	@Autowired
 	private NewSaleService newSaleService;
 
+	// Method for saving new sale items...
 	@PostMapping(CommonRequestMappigs.SALE)
 	public ResponseEntity<?> saveNewSale(@RequestBody CustomerDetails vo) {
 
@@ -33,6 +42,7 @@ public class NewSaleController {
 		return new ResponseEntity<>(message, HttpStatus.OK);
 	}
 
+	// Method for create new Barcode..
 	@PostMapping(CommonRequestMappigs.CREATE_BARCODE)
 	public ResponseEntity<?> saveBarcode(@RequestBody BarcodeVo vo) {
 
@@ -41,6 +51,7 @@ public class NewSaleController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
+	// Method for getting Barcode details from Barcode table using Barcode number
 	@GetMapping(CommonRequestMappigs.GET_BARCODE_DETAILS)
 	public ResponseEntity<?> getBarcodeDetails(@RequestParam String barCode) {
 
@@ -50,6 +61,7 @@ public class NewSaleController {
 
 	}
 
+	// Method for creating Delivery slip usinng List of Barcodes..
 	@PostMapping(CommonRequestMappigs.CREATE_DS)
 	public ResponseEntity<?> saveDeliverySlip(@RequestBody DeliverySlipVo vo) {
 
@@ -58,16 +70,5 @@ public class NewSaleController {
 		return new ResponseEntity<>(saveDs, HttpStatus.OK);
 
 	}
-
-	/*
-	 * @PostMapping(CommonRequestMappigs.CREATE_DS) public ResponseEntity<?>
-	 * saveDeliverySlip(@RequestBody DeliverySlipVo vo) {
-	 * 
-	 * ResponseEntity<?> saveDs = newSaleService.saveDeliverySlip(vo);
-	 * 
-	 * return new ResponseEntity<>(saveDs, HttpStatus.OK);
-	 * 
-	 * }
-	 */
 
 }
