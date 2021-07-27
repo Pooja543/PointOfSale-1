@@ -2,7 +2,9 @@ package com.newsaleapi.serviceimpl;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +17,16 @@ import org.springframework.web.client.RestTemplate;
 
 import com.newsaleapi.Entity.BarcodeEntity;
 import com.newsaleapi.Entity.DeliverySlipEntity;
+import com.newsaleapi.Entity.NewSaleEntity;
 import com.newsaleapi.mapper.NewSaleMapper;
 import com.newsaleapi.repository.BarcodeRepository;
 import com.newsaleapi.repository.DeliverySlipRepository;
+import com.newsaleapi.repository.NewSaleRepository;
+import com.newsaleapi.service.CustomerService;
 import com.newsaleapi.service.NewSaleService;
 import com.newsaleapi.vo.BarcodeVo;
-import com.newsaleapi.vo.CustomerDetails;
 import com.newsaleapi.vo.DeliverySlipVo;
+import com.newsaleapi.vo.NewSaleVo;
 
 /**
  * Service class contains all bussiness logics related to new sale , create
@@ -46,15 +51,69 @@ public class NewSaleServiceImpl implements NewSaleService {
 	@Autowired
 	private DeliverySlipRepository dsRepo;
 
+	@Autowired
+	private CustomerService customerService;
+
+	@Autowired
+	private NewSaleRepository newSaleRepository;
+
 	@Value("${savecustomer.url}")
 	private String url;
 
 	@Override
-	public ResponseEntity<?> saveNewSaleRequest(CustomerDetails vo) {
+	public ResponseEntity<?> saveNewSaleRequest(NewSaleVo vo) {
 
-		Object result = template.postForObject(url, vo, String.class);// rest call for Tag Customer
+		Random ran = new Random();
 
-		return new ResponseEntity<>(result, HttpStatus.OK);
+		NewSaleEntity entity = new NewSaleEntity();
+
+		if (vo.getCustomerDetails() != null) {
+
+			try {
+				customerService.saveCustomerDetails(vo.getCustomerDetails());
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
+
+			List<DeliverySlipVo> dlSlips = vo.getDlSlip();
+
+			entity.setNatureOfSale(vo.getNatureOfSale());
+			entity.setPayType(vo.getPayType());
+			entity.setGrossAmount(dlSlips.stream().mapToLong(i -> i.getMrp()).sum());
+			entity.setTotalPromoDisc(dlSlips.stream().mapToLong(i -> i.getPromoDisc()).sum());
+			entity.setTotalManualDisc(vo.getTotalManualDisc());
+			entity.setCreatedDate(LocalDate.now());
+
+			Long net = dlSlips.stream().mapToLong(i -> i.getNetAmount()).sum() - vo.getTotalManualDisc();
+
+			entity.setNetPayableAmount(net);
+
+			entity.setBillNumber(
+					"KLM/" + LocalDate.now().getYear() + LocalDate.now().getDayOfMonth() + "/" + ran.nextInt());
+
+			List<String> dlsList = dlSlips.stream().map(x -> x.getDsNumber()).collect(Collectors.toList());
+
+			List<DeliverySlipEntity> dsList = dsRepo.findByDsNumberIn(dlsList);
+
+			if (dsList.size() == vo.getDlSlip().size()) {
+
+				NewSaleEntity saveEntity = newSaleRepository.save(entity);
+
+				dsList.stream().forEach(a -> {
+
+					a.setNewsale(saveEntity);
+					a.setLastModified(LocalDateTime.now());
+
+					dsRepo.save(a);
+				});
+
+			} else {
+				return new ResponseEntity<>("Please enter Valid delivery slips..", HttpStatus.BAD_REQUEST);
+			}
+		}
+
+		return new ResponseEntity<>("Bill generated with number :" + entity.getBillNumber(), HttpStatus.OK);
 
 	}
 
@@ -87,10 +146,11 @@ public class NewSaleServiceImpl implements NewSaleService {
 		}
 	}
 
-//Method for saving delivery slip 
+	// Method for saving delivery slip
 	@Override
 	public String saveDeliverySlip(DeliverySlipVo vo) {
 
+		Random ran = new Random();
 		DeliverySlipEntity entity = new DeliverySlipEntity();
 		List<BarcodeVo> barVo = vo.getBarcode();
 
@@ -103,6 +163,7 @@ public class NewSaleServiceImpl implements NewSaleService {
 		entity.setCreatedDate(LocalDate.now());
 		entity.setLastModified(LocalDateTime.now());
 		entity.setStatus("Pending");
+		entity.setDsNumber("DS/" + LocalDate.now().getYear() + LocalDate.now().getDayOfMonth() + "/" + ran.nextInt());
 
 		DeliverySlipEntity savedEntity = dsRepo.save(entity);
 		List<String> barcodeList = barVo.stream().map(x -> x.getBarcode()).collect(Collectors.toList());
@@ -116,7 +177,7 @@ public class NewSaleServiceImpl implements NewSaleService {
 
 			barcodeRepository.save(a);
 		});
-		return "Successfully created Delivery slip ";
+		return "Successfully created Delivery slip with DS number : " + savedEntity.getDsNumber();
 	}
 
 }

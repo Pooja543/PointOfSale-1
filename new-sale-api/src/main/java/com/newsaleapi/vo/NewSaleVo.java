@@ -15,8 +15,6 @@ public class NewSaleVo {
 
 	private CustomerDetails customerDetails;
 
-	private List<DeliverySlipVo> dlSlip;
-
 	private SaleNature natureOfSale;
 
 	private PaymentType payType;
@@ -32,5 +30,9 @@ public class NewSaleVo {
 	private float roundOff;
 
 	private Long netPayableAmount;
+
+	private Long taxAmount;
+
+	private List<DeliverySlipVo> dlSlip;
 
 }

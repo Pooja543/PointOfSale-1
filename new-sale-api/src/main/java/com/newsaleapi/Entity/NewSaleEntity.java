@@ -1,18 +1,20 @@
 package com.newsaleapi.Entity;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.newsaleapi.common.PaymentType;
 import com.newsaleapi.common.SaleNature;
-import com.newsaleapi.vo.CustomerDetails;
-import com.newsaleapi.vo.DeliverySlipVo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,10 +30,8 @@ import lombok.ToString;
 public class NewSaleEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-
-	// private CustomerDetails customerDetails;
+	@GeneratedValue
+	private Long newsaleId;
 
 	private SaleNature natureOfSale;
 
@@ -49,8 +49,17 @@ public class NewSaleEntity {
 
 	private Long netPayableAmount;
 
-	/*
-	 * @OneToMany(mappedBy = "newsale") private List<DeliverySlipEntity> dlSlip
-	 */;
+	private Long taxAmount;
+
+	private String billNumber;
+
+	private LocalDate createdDate;
+
+	@OneToMany(targetEntity = DeliverySlipEntity.class, mappedBy = "newsale", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<DeliverySlipEntity> dlSlip;
+
+	@ManyToOne
+	@JoinColumn(name = "customer_id")
+	private CustomerDetailsEntity customerDetails;
 
 }

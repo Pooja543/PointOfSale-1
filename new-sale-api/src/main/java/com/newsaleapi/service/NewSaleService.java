@@ -12,7 +12,7 @@ import com.newsaleapi.vo.NewSaleVo;
 @Component
 public interface NewSaleService {
 
-	ResponseEntity<?> saveNewSaleRequest(CustomerDetails vo);
+	ResponseEntity<?> saveNewSaleRequest(NewSaleVo vo);
 
 	ResponseEntity<?> saveBarcode(BarcodeVo vo);
 

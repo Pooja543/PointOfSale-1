@@ -7,9 +7,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 @SpringBootApplication
 @ComponentScan(basePackages = { "com.newsaleapi", "com.newsaleapi.client" })
 @Configuration
+@EnableSwagger2
 public class NewSaleApiApplication {
 
 	@Bean

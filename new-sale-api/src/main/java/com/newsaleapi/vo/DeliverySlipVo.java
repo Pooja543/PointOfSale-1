@@ -17,6 +17,8 @@ public class DeliverySlipVo {
 	private List<BarcodeVo> barcode;
 
 	private int qty;
+	
+	private String dsNumber;
 
 	private String type;
 
