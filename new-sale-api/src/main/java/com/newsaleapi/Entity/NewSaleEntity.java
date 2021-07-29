@@ -48,6 +48,8 @@ public class NewSaleEntity {
 	private float roundOff;
 
 	private Long netPayableAmount;
+	
+	private Long taxId;
 
 	/*
 	 * @OneToMany(mappedBy = "newsale") private List<DeliverySlipEntity> dlSlip
