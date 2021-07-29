@@ -13,5 +13,7 @@ public class CommonRequestMappigs {
 	public static final String CREATE_DS = "createdeliveryslip";
 
 	public static final String GET_DS = "getdeliveryslip";
+	
+	public static final String GET_TAX_Details = "getTaxDetails";
 
 }
