@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.newsaleapi.common.CommonRequestMappigs;
 import com.newsaleapi.service.NewSaleService;
 import com.newsaleapi.vo.BarcodeVo;
@@ -58,6 +59,25 @@ public class NewSaleController {
 		return new ResponseEntity<>(saveDs, HttpStatus.OK);
 
 	}
+	
+	/*
+	 * rest call(getting tax details from hsn-details)
+	 */
+
+	@GetMapping(CommonRequestMappigs.GET_TAX_Details)
+	public ResponseEntity<?> getTaxDetails() {
+
+		try {
+			return new ResponseEntity<>(newSaleService.getNewSaleWithTax(), HttpStatus.OK);
+		} catch (JsonMappingException e) {
+
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+
+			e.printStackTrace();
+		}
+		return null;
+         }
 
 	/*
 	 * @PostMapping(CommonRequestMappigs.CREATE_DS) public ResponseEntity<?>
