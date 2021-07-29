@@ -1,7 +1,6 @@
 package com.newsaleapi.serviceimpl;
 
 import java.time.LocalDateTime;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newsaleapi.Entity.BarcodeEntity;
 import com.newsaleapi.Entity.DeliverySlipEntity;
 import com.newsaleapi.mapper.NewSaleMapper;
@@ -20,6 +22,8 @@ import com.newsaleapi.service.NewSaleService;
 import com.newsaleapi.vo.BarcodeVo;
 import com.newsaleapi.vo.CustomerDetails;
 import com.newsaleapi.vo.DeliverySlipVo;
+import com.newsaleapi.vo.TaxVo;
+import com.otsi.kalamandhir.gatewayresponse.GateWayResponse;
 
 @Service
 @Configuration
@@ -97,5 +101,21 @@ public class NewSaleServiceImpl implements NewSaleService {
 
 		return new ResponseEntity<>("Deliveryslip details saved successfully..", HttpStatus.OK);
 	}
+	
+	/*
+	 * get functionality for NewSaleWithTax
+	 */
+	@Override
+	public List<TaxVo> getNewSaleWithTax() throws JsonMappingException, JsonProcessingException {
+		// here, will template that taxUrl and assign to taxResponse
+		ResponseEntity<?> taxResponse = template.exchange(taxUrl, HttpMethod.GET, null, GateWayResponse.class);
+		ObjectMapper mapper = new ObjectMapper();
+		// here, will convert value through object mapper and assign to gateway response
+		GateWayResponse<?> gatewayResponse = mapper.convertValue(taxResponse.getBody(), GateWayResponse.class);
+		// her will convert value through object mapper and assign to vo and return vo
+		List<TaxVo> vo = mapper.convertValue(gatewayResponse.getResult(), new TypeReference<List<TaxVo>>() {
+		});
 
+		return vo;
+	}
 }
