@@ -12,6 +12,8 @@ public interface DeliverySlipRepository extends JpaRepository<DeliverySlipEntity
 
 	List<DeliverySlipEntity> findByDsNumberIn(List<String> dlsList);
 
+	DeliverySlipEntity findByDsNumber(String dsNumber);
+
 	// List<DeliverySlipEntity> findByDsNumberIn(List<DeliverySlipVo> dlSlips);
 
 }

@@ -92,10 +92,25 @@ public class NewSaleController {
 	@PostMapping(CommonRequestMappigs.CREATE_DS)
 	public ResponseEntity<?> saveDeliverySlip(@RequestBody DeliverySlipVo vo) {
 
-		String saveDs = newSaleService.saveDeliverySlip(vo);
-
-		return new ResponseEntity<>(saveDs, HttpStatus.OK);
-
+		try {
+			ResponseEntity<?> saveDs = newSaleService.saveDeliverySlip(vo);
+			return new ResponseEntity<>(saveDs, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 
+	// Method for getting Delivery slip Data using DsNumber
+	@GetMapping(CommonRequestMappigs.GET_DS)
+	public ResponseEntity<?> getDeliverySlipDetails(@RequestParam String dsNumber) {
+
+		try {
+			ResponseEntity<?> dsDetails = newSaleService.getDeliverySlipDetails(dsNumber);
+			return new ResponseEntity<>(dsDetails, HttpStatus.OK);
+
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+
+	}
 }

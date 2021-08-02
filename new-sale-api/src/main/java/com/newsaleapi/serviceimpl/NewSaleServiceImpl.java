@@ -2,7 +2,6 @@ package com.newsaleapi.serviceimpl;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -18,6 +17,8 @@ import org.springframework.web.client.RestTemplate;
 import com.newsaleapi.Entity.BarcodeEntity;
 import com.newsaleapi.Entity.DeliverySlipEntity;
 import com.newsaleapi.Entity.NewSaleEntity;
+import com.newsaleapi.common.DSStatus;
+import com.newsaleapi.mapper.DeliverySlipMapper;
 import com.newsaleapi.mapper.NewSaleMapper;
 import com.newsaleapi.repository.BarcodeRepository;
 import com.newsaleapi.repository.DeliverySlipRepository;
@@ -26,6 +27,7 @@ import com.newsaleapi.service.CustomerService;
 import com.newsaleapi.service.NewSaleService;
 import com.newsaleapi.vo.BarcodeVo;
 import com.newsaleapi.vo.DeliverySlipVo;
+import com.newsaleapi.vo.MessageVo;
 import com.newsaleapi.vo.NewSaleVo;
 
 /**
@@ -56,6 +58,9 @@ public class NewSaleServiceImpl implements NewSaleService {
 
 	@Autowired
 	private NewSaleRepository newSaleRepository;
+
+	@Autowired
+	private DeliverySlipMapper dsMapper;
 
 	@Value("${savecustomer.url}")
 	private String url;
@@ -148,36 +153,57 @@ public class NewSaleServiceImpl implements NewSaleService {
 
 	// Method for saving delivery slip
 	@Override
-	public String saveDeliverySlip(DeliverySlipVo vo) {
+	public ResponseEntity<?> saveDeliverySlip(DeliverySlipVo vo) {
+		try {
 
-		Random ran = new Random();
-		DeliverySlipEntity entity = new DeliverySlipEntity();
-		List<BarcodeVo> barVo = vo.getBarcode();
+			DeliverySlipEntity entity = dsMapper.convertDsVoToEntity(vo);
 
-		entity.setMrp(barVo.stream().mapToLong(i -> i.getMrp()).sum());
-		entity.setPromoDisc(barVo.stream().mapToLong(i -> i.getPromoDisc()).sum());
-		entity.setNetAmount(barVo.stream().mapToLong(i -> i.getNetAmount()).sum());
-		entity.setSalesMan(vo.getSalesMan());
-		entity.setQty(vo.getQty());
-		entity.setType(vo.getType());
-		entity.setCreatedDate(LocalDate.now());
-		entity.setLastModified(LocalDateTime.now());
-		entity.setStatus("Pending");
-		entity.setDsNumber("DS/" + LocalDate.now().getYear() + LocalDate.now().getDayOfMonth() + "/" + ran.nextInt());
+			DeliverySlipEntity savedEntity = dsRepo.save(entity);
 
-		DeliverySlipEntity savedEntity = dsRepo.save(entity);
-		List<String> barcodeList = barVo.stream().map(x -> x.getBarcode()).collect(Collectors.toList());
+			List<BarcodeVo> barVo = vo.getBarcode();
+			List<String> barcodeList = barVo.stream().map(x -> x.getBarcode()).collect(Collectors.toList());
 
-		List<BarcodeEntity> barcodeDetails = barcodeRepository.findByBarcodeIn(barcodeList);
+			List<BarcodeEntity> barcodeDetails = barcodeRepository.findByBarcodeIn(barcodeList);
 
-		barcodeDetails.stream().forEach(a -> {
+			barcodeDetails.stream().forEach(a -> {
 
-			a.setDeliverySlip(savedEntity);
-			a.setLastModified(LocalDateTime.now());
+				a.setDeliverySlip(savedEntity);
+				a.setLastModified(LocalDateTime.now());
 
-			barcodeRepository.save(a);
-		});
-		return "Successfully created Delivery slip with DS number : " + savedEntity.getDsNumber();
+				barcodeRepository.save(a);
+			});
+			MessageVo message = new MessageVo();
+			message.setMessage("Successfully created deliverySlip with DS Number " + entity.getDsNumber());
+			message.setNumber(entity.getDsNumber());
+
+			return new ResponseEntity<>(message, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("error occurs while saving Delivery slip", HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@Override
+	public ResponseEntity<?> getDeliverySlipDetails(String dsNumber) {
+		try {
+			DeliverySlipEntity dsEntity = dsRepo.findByDsNumber(dsNumber);
+
+			if (dsEntity != null) {
+				if (!dsEntity.getBarcodes().isEmpty()) {
+					DeliverySlipVo vo = dsMapper.convertDsEntityToVo(dsEntity);
+
+					return new ResponseEntity<>(vo, HttpStatus.OK);
+				} else {
+					return new ResponseEntity<>("Barcode details not exists with given DS Number",
+							HttpStatus.BAD_REQUEST);
+				}
+
+			} else {
+				return new ResponseEntity<>("No record with DsNumber :" + dsNumber, HttpStatus.BAD_REQUEST);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>("error occurs while saving Delivery slip", HttpStatus.BAD_REQUEST);
+		}
+
 	}
 
 }
