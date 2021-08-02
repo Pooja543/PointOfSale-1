@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-        working-directory: ./PointOfSale
+        working-directory: ./new-sale-api
     permissions:
       contents: read
       packages: write
