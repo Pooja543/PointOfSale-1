@@ -69,6 +69,22 @@
 			<scope>test</scope>
 		</dependency>
 
+                <scm>
+                   <connection>scm:git:https://github.com/niranjanmaradapu/PointOfSale.git</connection>
+                   <url>https://github.com/niranjanmaradapu/PointOfSale.git</url>
+                   <developerConnection>scm:git:https://github.com/niranjanmaradapu/PointOfSale.git</developerConnection>
+                   <tag>v1.5</tag>
+                </scm>
+	   		
+              <distributionManagement>
+	          <repository>
+                     <id>github</id>
+                     <name>Internal Releases</name>
+                     <url>https://maven.pkg.github.com/niranjanmaradapu/PointOfSale</url>
+                  </repository>
+             </distributionManagement>
+
+		
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
