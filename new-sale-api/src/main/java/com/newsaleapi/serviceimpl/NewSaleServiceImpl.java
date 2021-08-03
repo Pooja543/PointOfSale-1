@@ -40,6 +40,9 @@ public class NewSaleServiceImpl implements NewSaleService {
 
 	@Autowired
 	private DeliverySlipRepository dsRepo;
+	
+	@Value("${getNewSaleWithTax.url}")
+	private String taxUrl;
 
 	@Value("${savecustomer.url}")
 	private String url;
