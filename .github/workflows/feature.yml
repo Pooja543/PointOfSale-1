@@ -23,7 +23,7 @@ jobs:
 
       - name: Build with Maven
         run: |
-          mvn -B package --file new-sale-api/pom.xml
+          mvn compile war:war
           mkdir staging && cp target/*war-with-dependencies.war staging
       - uses: actions/upload-artifact@v1
         with:
