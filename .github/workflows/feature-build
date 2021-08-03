@@ -1,0 +1,44 @@
+name: Maven-docker-acr-eks-cicd
+on:
+  push:
+    branches:
+      - feature
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup jdk8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+          server-id: github
+          settings-path: ${{ GITHUB.WORKSPACE }}
+
+      - name: Build with Maven
+        run: |
+          mvn -B package --file new-sale-api/pom.xml
+          mvn install -DskipTests
+          mkdir staging && cp target/*.war staging
+          mvn deploy -DaltReleaseDeploymentRepository=repo.spring.io::default::https://repo.spring.io/release
+          
+        
+          
+      - name: set up a cache for maven
+        uses: actions/cache@v2
+        with: 
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+               
+      - name: persist workflow data as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: github-actions-artifact
+          path: staging  
