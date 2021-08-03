@@ -25,8 +25,8 @@ jobs:
         run: |
           mvn -B package --file new-sale-api/pom.xml
           mvn install -DskipTests
-          mvn help:active-profiles
           mkdir staging && cp target/*.war staging
+          mvn deploy -DaltReleaseDeploymentRepository=repo.spring.io::default::https://repo.spring.io/release
           
         
           
