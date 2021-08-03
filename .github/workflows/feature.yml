@@ -23,7 +23,7 @@ jobs:
 
       - name: Build with Maven
       - run: |
-          mvn --batch-mode --update-snapshots verify
+          mvn -B package --file new-sale-ai/pom.xml
           mkdir staging && cp target/*.war staging
       - uses: actions/upload-artifact@v1
         with:
