@@ -22,8 +22,9 @@ jobs:
           settings-path: ${{ GITHUB.WORKSPACE }}
 
       - name: Build with Maven
-      - run: mvn --batch-mode --update-snapshots verify
-      - run: mkdir staging && cp target/*.war staging
+      - run: |
+          mvn --batch-mode --update-snapshots verify
+          mkdir staging && cp target/*.war staging
       - uses: actions/upload-artifact@v1
         with:
           name: Package
