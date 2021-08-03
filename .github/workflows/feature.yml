@@ -22,7 +22,7 @@ jobs:
           settings-path: ${{ GITHUB.WORKSPACE }}
 
       - name: Build with Maven
-      - run: |
+        run: |
             mvn -B package --file new-sale-api/pom.xml
             mkdir staging && cp target/*.war staging
            
