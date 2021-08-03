@@ -24,9 +24,8 @@ jobs:
       - name: Build with Maven
         run: |
           mvn -B package --file new-sale-api/pom.xml
-          mvn install -DskipTests
           mkdir staging && cp target/*.war staging
-          mvn deploy -DaltReleaseDeploymentRepository=repo.spring.io::default::https://repo.spring.io/release
+          
            
       - name: set up a cache for maven
         uses: actions/cache@v2
