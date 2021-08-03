@@ -17,7 +17,6 @@ import org.springframework.web.client.RestTemplate;
 import com.newsaleapi.Entity.BarcodeEntity;
 import com.newsaleapi.Entity.DeliverySlipEntity;
 import com.newsaleapi.Entity.NewSaleEntity;
-import com.newsaleapi.common.DSStatus;
 import com.newsaleapi.mapper.DeliverySlipMapper;
 import com.newsaleapi.mapper.NewSaleMapper;
 import com.newsaleapi.repository.BarcodeRepository;
