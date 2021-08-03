@@ -28,7 +28,7 @@ public class CustomerServiceImpl implements CustomerService {
 		try {
 			Optional<CustomerDetailsEntity> list = customerRepo.findByMobileNumber(details.getMobileNumber());
 
-			if (list.isEmpty()) {
+			if (!list.isPresent()) {
 
 				CustomerDetailsEntity entity = customerMapper.convertVoToEntity(details);// mapper for VO to DTO
 				customerRepo.save(entity);
@@ -45,7 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public ResponseEntity<?> getCustomerByMobileNumber(String mobileNumber) {
 
 		Optional<CustomerDetailsEntity> customerDetails = customerRepo.findByMobileNumber(mobileNumber);
-		if (customerDetails.isEmpty()) {
+		if (!customerDetails.isPresent()) {
 			return new ResponseEntity<>(
 					"Customer is with mobile number " + mobileNumber + " not exists. So please fill all the details..",
 					HttpStatus.BAD_REQUEST);
