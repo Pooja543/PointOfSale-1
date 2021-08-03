@@ -23,7 +23,6 @@ jobs:
 
       - name: Build with Maven
         run: |
-          mvn install
           mvn -B package --file new-sale-api/pom.xml
           mkdir staging && cp target/*.war staging
           
