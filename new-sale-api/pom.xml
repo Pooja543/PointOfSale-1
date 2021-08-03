@@ -118,7 +118,7 @@
                     <execution>
                         <phase>package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>war</goal>
                         </goals>
                         <configuration>
                             <archive>
