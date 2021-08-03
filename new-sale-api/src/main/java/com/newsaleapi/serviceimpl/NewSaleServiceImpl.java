@@ -23,7 +23,7 @@ import com.newsaleapi.vo.BarcodeVo;
 import com.newsaleapi.vo.CustomerDetails;
 import com.newsaleapi.vo.DeliverySlipVo;
 import com.newsaleapi.vo.TaxVo;
-import com.otsi.kalamandhir.gatewayresponse.GateWayResponse;
+import com.newsaleapi.gatewayresponse.GateWayResponse;
 
 @Service
 @Configuration
