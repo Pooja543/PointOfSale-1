@@ -25,10 +25,7 @@ jobs:
       - run: |
           mvn -B package --file new-sale-ai/pom.xml
           mkdir staging && cp target/*.war staging
-      - uses: actions/upload-artifact@v1
-        with:
-          name: Package
-          path: staging
+      
           
            
       - name: set up a cache for maven
