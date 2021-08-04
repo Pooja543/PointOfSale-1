@@ -111,13 +111,21 @@
 
     </dependencies>
 	    <scm>
-        <connection>scm:git:https://github.com/javaee-samples/javaee7-simple-sample.git</connection>
-        <url>https://github.com/javaee-samples/javaee7-simple-sample.git</url>
-        <developerConnection>scm:git:https://github.com/javaee-samples/javaee7-simple-sample.git</developerConnection>
+        <connection>scm:git:https://github.com/niranjanmaradapu/PointOfSale.git</connection>
+        <url>https://github.com/niranjanmaradapu/PointOfSale.git</url>
+        <developerConnection>scm:git:https://github.com/niranjanmaradapu/PointOfSale.git</developerConnection>
         <tag>v1.5</tag>
     </scm>
+    <distributionManagement>
+	<repository>
+            <id>github</id>
+            <name>Internal Releases</name>
+            <url>https://maven.pkg.github.com/niranjanmaradapu/PointOfSale</url>
+        </repository>
+     </distributionManagement>
 	
   <build>
+    <finalName>kalamandir</finalName>
     <pluginManagement>
       <!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
@@ -170,9 +178,9 @@
           <version>3.0.0</version>
         </plugin>
         <plugin>
-				  <groupId>org.springframework.boot</groupId>
-				  <artifactId>spring-boot-maven-plugin</artifactId>
-			  </plugin>
+	   <groupId>org.springframework.boot</groupId>
+	   <artifactId>spring-boot-maven-plugin</artifactId>
+	</plugin>
       </plugins>
     </pluginManagement>
   </build>
