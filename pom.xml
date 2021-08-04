@@ -15,6 +15,7 @@
 	<artifactId>kalamandir</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>kalamandir</name>
+	<packaging>war</packaging>
 	<description>Kalamandir project for Spring Boot</description>
 
     <properties>
@@ -25,6 +26,13 @@
     </properties>
 
     <dependencies>
+	<dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>7.0</version>
+            <scope>provided</scope>
+        </dependency>
+	    
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -102,11 +110,13 @@
 -->
 
     </dependencies>
-              <build>
-		             <plugins>
-			             
-		             </plugins>
-	             </build>
+	    <scm>
+        <connection>scm:git:https://github.com/javaee-samples/javaee7-simple-sample.git</connection>
+        <url>https://github.com/javaee-samples/javaee7-simple-sample.git</url>
+        <developerConnection>scm:git:https://github.com/javaee-samples/javaee7-simple-sample.git</developerConnection>
+        <tag>v1.5</tag>
+    </scm>
+	
   <build>
     <pluginManagement>
       <!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
