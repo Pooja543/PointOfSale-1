@@ -32,15 +32,4 @@ build:
         name: artifact.jar
         path: github-actions-java-maven/target/github-actions-java-maven.jar
            
-      - name: set up a cache for maven
-        uses: actions/cache@v2
-        with: 
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-               
-      - name: persist workflow data as artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: github-actions-artifact
-          path: staging  
+    
