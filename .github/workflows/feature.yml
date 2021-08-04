@@ -4,32 +4,37 @@ on:
     branches:
       - feature
 jobs:
-compile:
-build:
-    runs-on: ubuntu-20.04
-    needs: compile
-    name: Build the Maven Project
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/cache@v2
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
-    - name: Set up JDK 11
-      uses: actions/setup-java@v2
-      with:
+      - uses: actions/checkout@v2
+      - name: Setup jdk8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
           distribution: 'adopt'
-          java-version: '11'
-          java-package: jdk
-    - name: Build and test project
-      working-directory: github-actions-java-maven
-      run: mvn -B verify
-    - name: Upload Maven build artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: artifact.jar
-        path: github-actions-java-maven/target/github-actions-java-maven.jar
-           
-    
+          server-id: github
+          settings-path: ${{ GITHUB.WORKSPACE }}
+
+      - name: Build with Maven
+        run: |
+            mvn -B package --file new-sale-api/pom.xml
+            mkdir staging && cp new-sale-api/target/*.jar staging
+     
+      - name: set up a cache for maven
+        uses: actions/cache@v2
+        with: 
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+               
+      - name: persist workflow data as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: github-actions-artifact
+          path: staging
+      
