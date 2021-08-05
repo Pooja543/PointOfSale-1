@@ -48,5 +48,14 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v1
         with:
-         path: .github/workflows/secrets.json
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
           
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/new-sale-api:latest
+          file: ./Dockerfile
